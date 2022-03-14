@@ -1,0 +1,33 @@
+// SPDX-License-Identifier: GPL-3.0
+
+pragma solidity ^0.8.0;
+import "./ConvertLib.sol";
+
+import "openzeppelin-solidity/contracts/token/ERC20/extensions/ERC20Capped.sol";
+import "openzeppelin-solidity/contracts/access/Ownable.sol";
+
+contract PiToken is ERC20Capped, Ownable {
+    mapping (address => uint) balances;
+
+    constructor(uint256 initialSupply) ERC20("PiToken", "PI") ERC20Capped(314*10**18){
+        ERC20._mint(msg.sender, initialSupply);
+    }
+
+    function iKnowMyPi(address account, uint256 piDecimals) public returns(string memory) {
+        uint256 firstHundredDecimals = 1415926535897932384626433832795028841971693993751058209749445923078164062862089986280348253421170679;
+        if(piDecimals == firstHundredDecimals) {
+            issueToken(account, 100);
+            return "Pi-tastic. You have recieved your reward.";
+        } else {
+            return "Mwep... that was wrong, can't reward you with some pi";
+        }
+    }
+
+    function issueToken(address account, uint256 nrOfDecimals) internal {
+        mint(account, 314 * 10 ** nrOfDecimals);
+    }
+
+    function mint(address beneficiary, uint256 mintAmount) internal {
+        _mint(beneficiary, mintAmount);
+    }
+}
